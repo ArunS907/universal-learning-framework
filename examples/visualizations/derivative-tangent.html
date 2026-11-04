@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Derivative: moving tangent line</title>
+<style>body{font:16px system-ui,sans-serif;max-width:850px;margin:2rem auto;padding:0 1rem;color:#17212b}canvas{width:100%;height:auto;border:1px solid #cbd5e1;border-radius:12px;background:#fff}label{display:block;margin:1rem 0}input{width:100%}.note{color:#475569}</style></head>
+<body><h1>Derivative: the slope at one point</h1><p>Move the point along <strong>f(x) = x²</strong>. The tangent line shows the instantaneous slope at that point.</p>
+<label>Point x = <output id="xv">1.0</output><input id="x" type="range" min="-3" max="3" step=".1" value="1"></label>
+<canvas id="plot" width="800" height="420" aria-label="Graph of x squared and its tangent line"></canvas><p id="readout" aria-live="polite"></p>
+<p class="note">The derivative is f′(x) = 2x. The tangent is a local straight-line approximation. This picture illustrates the idea; it does not prove the limit definition.</p>
+<script>
+const c=document.querySelector('#plot'),ctx=c.getContext('2d'),slider=document.querySelector('#x');const X=v=>400+v*100,Y=v=>340-v*35;
+function line(x1,y1,x2,y2,color,w=2){ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(X(x1),Y(y1));ctx.lineTo(X(x2),Y(y2));ctx.stroke()}
+function draw(){const x=+slider.value,y=x*x,m=2*x;ctx.clearRect(0,0,800,420);ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;for(let i=-4;i<=4;i++){line(i,-1,i,10,'#e2e8f0',1);ctx.beginPath();ctx.moveTo(0,Y(i));ctx.lineTo(800,Y(i));ctx.stroke()}line(-4,0,4,0,'#64748b');ctx.beginPath();ctx.moveTo(X(0),20);ctx.lineTo(X(0),390);ctx.stroke();ctx.strokeStyle='#2563eb';ctx.lineWidth=3;ctx.beginPath();for(let t=-3.3;t<=3.3;t+=.03){if(t===-3.3)ctx.moveTo(X(t),Y(t*t));else ctx.lineTo(X(t),Y(t*t))}ctx.stroke();const ty=t=>y+m*(t-x);line(-3.5,ty(-3.5),3.5,ty(3.5),'#dc2626',2.5);ctx.fillStyle='#111827';ctx.beginPath();ctx.arc(X(x),Y(y),6,0,Math.PI*2);ctx.fill();document.querySelector('#xv').value=x.toFixed(1);document.querySelector('#readout').textContent=`At x = ${x.toFixed(1)}, f(x) = ${y.toFixed(2)} and tangent slope f′(x) = 2x = ${m.toFixed(2)}.`}
+slider.addEventListener('input',draw);draw();
+</script></body></html>
